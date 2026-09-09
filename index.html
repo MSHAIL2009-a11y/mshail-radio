@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>US Music Radio - @mshail100</title>
+
+<!-- خطوط القلم اليدوية -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f09433'/%3E%3Cstop offset='30%25' stop-color='%23e6683c'/%3E%3Cstop offset='60%25' stop-color='%23dc2743'/%3E%3Cstop offset='100%25' stop-color='%23bc1888'/%3E%3C/linearGradient%3E%3ClinearGradient id='metal' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%232a1245'/%3E%3Cstop offset='100%25' stop-color='%23110521'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='120' fill='url(%23bg)'/%3E%3Cline x1='160' y1='180' x2='90' y2='70' stroke='%23fff' stroke-width='16' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='70' r='15' fill='%2300f0ff'/%3E%3Crect x='70' y='170' width='372' height='250' rx='35' fill='url(%23metal)' stroke='rgba(255,255,255,0.25)' stroke-width='6'/%3E%3Ccircle cx='180' cy='295' r='75' fill='%231b0a30' stroke='%23ff2a85' stroke-width='6'/%3E%3Ccircle cx='180' cy='295' r='50' fill='%230d0417' stroke='%2300f0ff' stroke-width='4'/%3E%3Ccircle cx='180' cy='295' r='25' fill='%23ff2a85'/%3E%3Crect x='290' y='220' width='120' height='55' rx='12' fill='%23000' stroke='%2300f0ff' stroke-width='3'/%3E%3Ctext x='350' y='255' fill='%2300f0ff' font-size='20' font-family='sans-serif' font-weight='bold' text-anchor='middle'%3ELIVE%3C/text%3E%3Ccircle cx='320' cy='335' r='22' fill='%233a1c5c' stroke='%23ff2a85' stroke-width='4'/%3E%3Ccircle cx='380' cy='335' r='22' fill='%233a1c5c' stroke='%23ff2a85' stroke-width='4'/%3E%3C/svg%3E">
+
+<style>
+  * { 
+    box-sizing: border-box; margin: 0; padding: 0; 
+    font-family: 'Marhey', 'Caveat', cursive, system-ui, sans-serif; 
+  }
+  
+  :root {
+    --insta-grad: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    --neon-blue: #00d2ff;
+    --card-bg: rgba(22, 14, 38, 0.88);
+    --border-color: rgba(220, 39, 67, 0.35);
+  }
+
+  body {
+    background-color: #08030f;
+    color: #f8fafc; padding: 12px; min-height: 100vh; transition: direction 0.3s;
+    position: relative; overflow-x: hidden;
+  }
+
+  /* طبقة الإضاءة التفاعلية المتموجة في الخلفية */
+  .ambient-mesh {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none; z-index: -1; overflow: hidden;
+    opacity: 0.35; transition: opacity 0.8s ease;
+  }
+  
+  /* زيادة توهج الإضاءة عند تشغيل الموسيقى */
+  body.is-audio-playing .ambient-mesh {
+    opacity: 0.85;
+  }
+
+  .mesh-orb {
+    position: absolute; border-radius: 50%; filter: blur(75px);
+    will-change: transform, opacity; opacity: 0.6;
+  }
+  .orb-orange {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, #f09433 10%, #e6683c 60%, transparent 80%);
+    top: -5%; left: 5%;
+  }
+  .orb-pink {
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, #dc2743 15%, #cc2366 60%, transparent 80%);
+    top: 25%; right: -10%;
+  }
+  .orb-purple {
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, #bc1888 20%, #4c1a59 70%, transparent 85%);
+    bottom: 5%; left: 15%;
+  }
+  .orb-violet {
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, #ff2a85 10%, #8a2be2 60%, transparent 80%);
+    bottom: 25%; right: 10%;
+  }
+
+  /* تموج الأضواء عند تشغيل الموسيقى فقط */
+  body.is-audio-playing .orb-orange {
+    animation: orbWave1 7s ease-in-out infinite alternate;
+  }
+  body.is-audio-playing .orb-pink {
+    animation: orbWave2 8.5s ease-in-out infinite alternate;
+  }
+  body.is-audio-playing .orb-purple {
+    animation: orbWave3 10s ease-in-out infinite alternate;
+  }
+  body.is-audio-playing .orb-violet {
+    animation: orbWave4 6.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes orbWave1 {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(45px, 65px, 0) scale(1.3); }
+    100% { transform: translate3d(-35px, 35px, 0) scale(0.9); }
+  }
+  @keyframes orbWave2 {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(-65px, -45px, 0) scale(1.35); }
+    100% { transform: translate3d(35px, 55px, 0) scale(0.85); }
+  }
+  @keyframes orbWave3 {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(55px, -55px, 0) scale(1.25); }
+    100% { transform: translate3d(-45px, -25px, 0) scale(0.9); }
+  }
+  @keyframes orbWave4 {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(-45px, 45px, 0) scale(1.4); }
+    100% { transform: translate3d(25px, -45px, 0) scale(0.8); }
+  }
+
+  /* الكارت الشخصي العلوي */
+  .profile-card {
+    background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px;
+    padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(220, 39, 67, 0.2);
+    backdrop-filter: blur(16px); margin-bottom: 12px;
+  }
+  .user-info { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+  .radio-avatar {
+    width: 32px; height: 32px; min-width: 32px; border-radius: 9px; background: var(--insta-grad);
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(220, 39, 67, 0.6); padding: 5px;
+  }
+  .radio-avatar svg { width: 100%; height: 100%; }
+  
+  .username {
+    font-size: 0.92rem; font-weight: 700; color: #fff;
+    display: flex; align-items: center; gap: 4px; direction: ltr;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .badge-check {
+    background: #38bdf8; color: #000; font-size: 0.55rem; border-radius: 50%;
+    width: 14px; height: 14px; display: inline-flex; align-items: center; justify-content: center; font-weight: 900;
+  }
+  
+  .actions-group { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+  .btn-social {
+    width: 28px; height: 28px; border-radius: 8px; display: inline-flex; align-items: center;
+    justify-content: center; text-decoration: none; color: #fff; transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .btn-social svg { width: 14px; height: 14px; fill: currentColor; }
+  .btn-ig { background: var(--insta-grad); box-shadow: 0 3px 8px rgba(220, 39, 67, 0.35); }
+  .btn-tt { background: #000; border: 1px solid rgba(255, 255, 255, 0.25); box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35); }
+  
+  .btn-lang {
+    display: inline-flex; align-items: center; gap: 3px; padding: 5px 9px; border-radius: 8px;
+    font-size: 0.78rem; font-weight: 700; color: #fff; cursor: pointer; border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08); transition: 0.2s; white-space: nowrap; flex-shrink: 0;
+  }
+  .btn-social:active, .btn-lang:active { transform: scale(0.92); }
+
+  /* شريط المحطة الحالية بالأعلى */
+  .now-playing-banner {
+    position: sticky; top: 8px; z-index: 99;
+    background: rgba(26, 15, 42, 0.94); border: 1.5px solid rgba(240, 148, 51, 0.5);
+    border-radius: 18px; padding: 10px 14px; margin-bottom: 14px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7), 0 0 20px rgba(220, 39, 67, 0.35);
+    backdrop-filter: blur(18px); transition: all 0.3s ease;
+  }
+  .now-playing-banner.is-active {
+    border-color: #f09433;
+    box-shadow: 0 8px 30px rgba(240, 148, 51, 0.4), 0 0 25px rgba(220, 39, 67, 0.5);
+  }
+  .np-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+  .np-status-row { display: flex; align-items: center; gap: 6px; }
+  .np-badge {
+    font-size: 0.68rem; font-weight: 700; color: #fff; background: var(--insta-grad);
+    padding: 2px 8px; border-radius: 10px; display: inline-flex; align-items: center; gap: 4px;
+  }
+  .pulse-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: #fff; display: inline-block;
+  }
+  .is-active .pulse-dot {
+    animation: pulse-dot 1.2s infinite ease-in-out;
+  }
+  @keyframes pulse-dot { 0% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.3); } 100% { opacity: 0.3; transform: scale(0.8); } }
+
+  .np-title {
+    font-size: 1.05rem; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .np-tag { font-size: 0.72rem; color: #f09433; font-weight: 600; }
+
+  .np-master-btn {
+    width: 44px; height: 44px; min-width: 44px; border-radius: 50%; border: none;
+    background: var(--insta-grad); color: #fff; font-size: 1.35rem; display: flex;
+    align-items: center; justify-content: center; cursor: pointer;
+    box-shadow: 0 4px 15px rgba(220, 39, 67, 0.6); transition: 0.2s;
+  }
+  .np-master-btn:active { transform: scale(0.9); }
+  .np-master-btn.btn-disabled { opacity: 0.4; pointer-events: none; }
+
+  /* التبويبات */
+  .tab-input { display: none; }
+  .tabs-nav { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 14px; scrollbar-width: none; }
+  .tabs-nav::-webkit-scrollbar { display: none; }
+  .tab-label {
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); color: #cbd5e1;
+    padding: 7px 13px; border-radius: 18px; font-size: 0.85rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: 0.25s;
+  }
+
+  #tab-fav:checked ~ .tabs-nav .lbl-fav,
+  #tab-pop:checked ~ .tabs-nav .lbl-pop,
+  #tab-hiphop:checked ~ .tabs-nav .lbl-hiphop,
+  #tab-dance:checked ~ .tabs-nav .lbl-dance,
+  #tab-rnb:checked ~ .tabs-nav .lbl-rnb,
+  #tab-rock:checked ~ .tabs-nav .lbl-rock,
+  #tab-country:checked ~ .tabs-nav .lbl-country,
+  #tab-retro:checked ~ .tabs-nav .lbl-retro,
+  #tab-chill:checked ~ .tabs-nav .lbl-chill {
+    background: var(--insta-grad); color: #fff; font-weight: 700; border-color: transparent; box-shadow: 0 4px 14px rgba(220, 39, 67, 0.5);
+  }
+
+  #tab-fav:checked ~ .stations-grid .card:not(.is-fav) { display: none; }
+  #tab-pop:checked ~ .stations-grid .card:not(.pop) { display: none; }
+  #tab-hiphop:checked ~ .stations-grid .card:not(.hiphop) { display: none; }
+  #tab-dance:checked ~ .stations-grid .card:not(.dance) { display: none; }
+  #tab-rnb:checked ~ .stations-grid .card:not(.rnb) { display: none; }
+  #tab-rock:checked ~ .stations-grid .card:not(.rock) { display: none; }
+  #tab-country:checked ~ .stations-grid .card:not(.country) { display: none; }
+  #tab-retro:checked ~ .stations-grid .card:not(.retro) { display: none; }
+  #tab-chill:checked ~ .stations-grid .card:not(.chill) { display: none; }
+
+  /* الكروت وتنسيق المشغل */
+  .stations-grid { display: flex; flex-direction: column; gap: 11px; }
+  .card {
+    background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px;
+    padding: 13px; display: flex; flex-direction: column; gap: 11px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(14px);
+  }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .station-title { font-size: 1.02rem; font-weight: 700; color: #f8fafc; margin-bottom: 4px; direction: ltr; text-align: start;}
+  
+  html[dir="rtl"] .station-title { text-align: right; }
+  html[dir="ltr"] .station-title { text-align: left; }
+
+  .station-tag {
+    font-size: 0.73rem; font-weight: 700; color: #ffb703; background: rgba(255, 183, 3, 0.12);
+    border: 1px solid rgba(255, 183, 3, 0.3); padding: 2px 9px; border-radius: 14px; display: inline-block;
+  }
+  
+  .fav-btn { background: none; border: none; font-size: 1.4rem; color: rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s; line-height: 1; padding: 0 4px; }
+  .fav-btn.active { color: #ffd700; text-shadow: 0 0 12px rgba(255, 215, 0, 0.6); transform: scale(1.15); }
+
+  .custom-player {
+    display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.45);
+    padding: 7px 11px; border-radius: 30px; border: 1px solid rgba(220, 39, 67, 0.3);
+    position: relative; overflow: hidden; transition: 0.3s;
+  }
+  .custom-player.playing { border-color: transparent; box-shadow: 0 0 12px rgba(240, 148, 51, 0.4), inset 0 0 15px rgba(188, 24, 136, 0.25); }
+  .custom-player.playing::before {
+    content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
+    background: var(--insta-grad); z-index: -1; border-radius: 32px;
+  }
+  .play-btn {
+    width: 36px; height: 36px; border-radius: 50%; border: none; background: #fff;
+    color: #dc2743; font-size: 1.15rem; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1; transition: 0.2s;
+  }
+  .play-btn:active { transform: scale(0.9); }
+  .playing .play-btn { background: var(--insta-grad); color: #fff; box-shadow: 0 0 12px rgba(220, 39, 67, 0.6); }
+
+  .visualizer { flex-grow: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; position: relative; overflow: hidden; z-index: 1;}
+  .visualizer::after {
+    content: ''; position: absolute; top: 0; left: -50%; height: 100%; width: 40%;
+    background: var(--insta-grad); box-shadow: 0 0 10px #f09433; opacity: 0; transition: 0.3s;
+  }
+  .playing .visualizer::after { opacity: 1; animation: neon-wave 1.5s infinite linear; }
+  @keyframes neon-wave { 0% { left: -50%; } 100% { left: 100%; } }
+
+  .status-text { font-size: 0.74rem; font-weight: 700; color: #94a3b8; width: 90px; text-align: center; z-index: 1;}
+  .playing .status-text { color: #f09433; text-shadow: 0 0 6px rgba(240, 148, 51, 0.5); }
+  .buffering .status-text { color: #ffd700; }
+  .repairing .status-text { color: #ff9800; font-weight: 800; }
+</style>
+</head>
+<body>
+
+<!-- كرات الإضاءة المتموجة في الخلفية -->
+<div class="ambient-mesh" id="ambient-mesh" aria-hidden="true">
+  <div class="mesh-orb orb-orange"></div>
+  <div class="mesh-orb orb-pink"></div>
+  <div class="mesh-orb orb-purple"></div>
+  <div class="mesh-orb orb-violet"></div>
+</div>
+
+<div class="profile-card">
+  <div class="user-info">
+    <div class="radio-avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4.9 19h14.2c1 0 1.9-.9 1.9-2V9c0-1.1-.9-2-1.9-2H4.9c-1 0-1.9.9-1.9 2v8c0 1.1.9 2 1.9 2z"/>
+        <circle cx="9" cy="13" r="2.5"/>
+        <line x1="14" y1="11" x2="18" y2="11"/>
+        <line x1="14" y1="15" x2="18" y2="15"/>
+        <line x1="6.5" y1="7" x2="14.5" y2="2.5"/>
+      </svg>
+    </div>
+    <div class="username">@mshail100 <span class="badge-check">✓</span></div>
+  </div>
+  
+  <div class="actions-group">
+    <a href="https://www.instagram.com/mshail100" target="_blank" class="btn-social btn-ig" title="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    </a>
+    <a href="https://www.tiktok.com/@mshail100" target="_blank" class="btn-social btn-tt" title="TikTok">
+      <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.47 6.28 6.28 0 0 0 1.87-4.47V8.52a8.27 8.27 0 0 0 4.9 1.58V6.69z"/></svg>
+    </a>
+    <button class="btn-lang" onclick="toggleLanguage()" id="ui-btn-lang">🌐 English</button>
+  </div>
+</div>
+
+<!-- شريط المحطة الحالية وزر الإيقاف السريع -->
+<div class="now-playing-banner" id="now-playing-banner">
+  <div class="np-info">
+    <div class="np-status-row">
+      <div class="np-badge" id="np-badge">
+        <span class="pulse-dot"></span>
+        <span id="np-badge-text">متوقف</span>
+      </div>
+      <div class="np-tag" id="np-tag">جاهز للبث</div>
+    </div>
+    <div class="np-title" id="np-title">اختر إذاعة لتشغيلها 🎧</div>
+  </div>
+  <button class="np-master-btn btn-disabled" id="np-master-btn" onclick="toggleMasterPlay()">▶</button>
+</div>
+
+<!-- أقسام الموسيقى -->
+<input type="radio" name="genre" id="tab-fav" class="tab-input">
+<input type="radio" name="genre" id="tab-pop" class="tab-input" checked>
+<input type="radio" name="genre" id="tab-hiphop" class="tab-input">
+<input type="radio" name="genre" id="tab-dance" class="tab-input">
+<input type="radio" name="genre" id="tab-rnb" class="tab-input">
+<input type="radio" name="genre" id="tab-rock" class="tab-input">
+<input type="radio" name="genre" id="tab-country" class="tab-input">
+<input type="radio" name="genre" id="tab-retro" class="tab-input">
+<input type="radio" name="genre" id="tab-chill" class="tab-input">
+
+<div class="tabs-nav">
+  <label for="tab-fav" class="tab-label lbl-fav" id="lbl-fav">⭐ المفضلة</label>
+  <label for="tab-pop" class="tab-label lbl-pop" id="lbl-pop">🔥 توب 40 وبوب</label>
+  <label for="tab-hiphop" class="tab-label lbl-hiphop" id="lbl-hiphop">🎤 هيب هوب وراب</label>
+  <label for="tab-dance" class="tab-label lbl-dance" id="lbl-dance">⚡ رقص وEDM</label>
+  <label for="tab-rnb" class="tab-label lbl-rnb" id="lbl-rnb">🎷 آر أند بي وسول</label>
+  <label for="tab-rock" class="tab-label lbl-rock" id="lbl-rock">🎸 روك وميتال</label>
+  <label for="tab-country" class="tab-label lbl-country" id="lbl-country">🤠 كانتري وريف</label>
+  <label for="tab-retro" class="tab-label lbl-retro" id="lbl-retro">📻 80s و 90s ريترو</label>
+  <label for="tab-chill" class="tab-label lbl-chill" id="lbl-chill">☕ جاز وتشيلاوت</label>
+</div>
+
+<div class="stations-grid" id="stations-container"></div>
+
+<script>
+  const uiDict = {
+    ar: {
+      btnLang: "🌐 English",
+      tabFav: "⭐ المفضلة",
+      tabPop: "🔥 توب 40 وبوب",
+      tabHipHop: "🎤 هيب هوب وراب",
+      tabDance: "⚡ رقص وEDM",
+      tabRnb: "🎷 آر أند بي وسول",
+      tabRock: "🎸 روك وميتال",
+      tabCountry: "🤠 كانتري وريف",
+      tabRetro: "📻 80s و 90s ريترو",
+      tabChill: "☕ جاز وتشيلاوت",
+      statusStop: "متوقف", statusLoad: "جاري التحميل...", statusLive: "مباشر 🔴", statusFixing: "🛠️ جاري الإصلاح...",
+      npIdle: "اختر إذاعة لتشغيلها 🎧", npIdleTag: "جاهز للبث", npPlaying: "يعمل الآن 🔴", npPaused: "متوقف مؤقتاً"
+    },
+    en: {
+      btnLang: "🌐 العربية",
+      tabFav: "⭐ Favorites",
+      tabPop: "🔥 Top 40 & Pop",
+      tabHipHop: "🎤 Hip-Hop & Rap",
+      tabDance: "⚡ Dance & EDM",
+      tabRnb: "🎷 R&B & Soul",
+      tabRock: "🎸 Rock & Metal",
+      tabCountry: "🤠 Country",
+      tabRetro: "📻 80s & 90s Retro",
+      tabChill: "☕ Jazz & Chill",
+      statusStop: "Stopped", statusLoad: "Loading...", statusLive: "Live 🔴", statusFixing: "🛠️ Repairing...",
+      npIdle: "Select a station to play 🎧", npIdleTag: "Ready to stream", npPlaying: "Now Playing 🔴", npPaused: "Paused"
+    }
+  };
+
+  const stations = [
+    // 🔥 توب 40 وبوب (POP & TOP 40)
+    { id: 'p1', tab: 'pop', title: '🇺🇸 Power 181 Top 40', tagAr: 'أقوى أغاني أمريكا', tagEn: 'Top 40 USA', urls: ['https://listen.181fm.com/181-power_128k.mp3', 'https://icecast.somafm.com/poptron-128-mp3', 'https://stream.radioparadise.com/mp3-128'] },
+    { id: 'p2', tab: 'pop', title: '🇺🇸 Radio Paradise Main', tagAr: 'بوب ميكس كاليفورنيا', tagEn: 'California Pop', urls: ['https://stream.radioparadise.com/mp3-128', 'https://icecast.somafm.com/poptron-128-mp3'] },
+    { id: 'p3', tab: 'pop', title: '🇺🇸 PopTron USA', tagAr: 'بوب إلكتروني راقص', tagEn: 'Electropop Hits', urls: ['https://icecast.somafm.com/poptron-128-mp3', 'https://stream.radioparadise.com/mp3-128'] },
+    { id: 'p4', tab: 'pop', title: '🇺🇸 The Vibe of Vegas', tagAr: 'أجواء فيغاس بوب', tagEn: 'Vegas Pop', urls: ['https://listen.181fm.com/181-vibe_128k.mp3', 'https://listen.181fm.com/181-power_128k.mp3'] },
+    { id: 'p5', tab: 'pop', title: '🇺🇸 The Office Adult Pop', tagAr: 'بوب هادئ وممتع', tagEn: 'Workplace Pop', urls: ['https://listen.181fm.com/181-office_128k.mp3', 'https://listen.181fm.com/181-power_128k.mp3'] },
+    { id: 'p6', tab: 'pop', title: '🇺🇸 Party 181 Hits', tagAr: 'حفلات وتوب 40', tagEn: 'Party Top 40', urls: ['https://listen.181fm.com/181-party_128k.mp3', 'https://listen.181fm.com/181-power_128k.mp3'] },
+    { id: 'p7', tab: 'pop', title: '🇺🇸 Bright 90s Pop', tagAr: 'بوب التسعينات المشرق', tagEn: 'Bright Pop', urls: ['https://listen.181fm.com/181-bright90s_128k.mp3', 'https://stream.radioparadise.com/mp3-128'] },
+    { id: 'p8', tab: 'pop', title: '🇺🇸 UK Top 40 Chart', tagAr: 'سباق الأغاني العالمي', tagEn: 'Top 40 Global', urls: ['https://listen.181fm.com/181-uktop40_128k.mp3', 'https://listen.181fm.com/181-power_128k.mp3'] },
+    { id: 'p9', tab: 'pop', title: '🇺🇸 Mellow Gold Pop', tagAr: 'بوب ناعم وكلاسيكي', tagEn: 'Mellow Pop', urls: ['https://listen.181fm.com/181-mellow_128k.mp3', 'https://stream.radioparadise.com/mellow-128'] },
+    { id: 'p10', tab: 'pop', title: '🇺🇸 Covers Project', tagAr: 'أغاني بوب بأصوات جديدة', tagEn: 'Pop Covers', urls: ['https://icecast.somafm.com/covers-128-mp3', 'https://stream.radioparadise.com/mp3-128'] },
+    { id: 'p11', tab: 'pop', title: '🇺🇸 Star 90s Dance Pop', tagAr: 'بوب ورقص التسعينات', tagEn: '90s Pop Dance', urls: ['https://listen.181fm.com/181-star90s_128k.mp3', 'https://listen.181fm.com/181-power_128k.mp3'] },
+
+    // 🎤 هيب هوب وراب (HIP-HOP & RAP)
+    { id: 'h1', tab: 'hiphop', title: '🇺🇸 The Beat Hip Hop', tagAr: 'أقوى أغاني الهيب هوب', tagEn: 'Hip Hop & Rap', urls: ['https://listen.181fm.com/181-beat_128k.mp3', 'https://icecast.somafm.com/fluid-128-mp3'] },
+    { id: 'h2', tab: 'hiphop', title: '🇺🇸 Old School HipHop', tagAr: 'أولد سكول راب 90s', tagEn: 'Golden Era Rap', urls: ['https://listen.181fm.com/181-oldschool_128k.mp3', 'https://listen.181fm.com/181-beat_128k.mp3'] },
+    { id: 'h3', tab: 'hiphop', title: '🇺🇸 Jammin 181 Urban', tagAr: 'إيقاعات الراب الحديث', tagEn: 'Urban Beats', urls: ['https://listen.181fm.com/181-jammin_128k.mp3', 'https://icecast.somafm.com/fluid-128-mp3'] },
+    { id: 'h4', tab: 'hiphop', title: '🇺🇸 Fluid Hip-Hop Chill', tagAr: 'أندر جراوند وهيب هوب', tagEn: 'Hip Hop Vibes', urls: ['https://icecast.somafm.com/fluid-128-mp3', 'https://listen.181fm.com/181-beat_128k.mp3'] },
+    { id: 'h5', tab: 'hiphop', title: '🇺🇸 US Hardcore Rap', tagAr: 'راب أمريكي حماسي', tagEn: 'Hardcore Rap', urls: ['https://stream.zeno.fm/yn9um4pn70hvv', 'https://listen.181fm.com/181-beat_128k.mp3'] },
+    { id: 'h6', tab: 'hiphop', title: '🇺🇸 Trap Nation USA', tagAr: 'تراب أمريكي بيز قوي', tagEn: 'Trap & Bass', urls: ['https://stream.zeno.fm/0r0xa792kwzuv', 'https://icecast.somafm.com/fluid-128-mp3'] },
+    { id: 'h7', tab: 'hiphop', title: '🇺🇸 West Coast Rap', tagAr: 'راب الساحل الغربي', tagEn: 'West Coast Rap', urls: ['https://listen.181fm.com/181-oldschool_128k.mp3', 'https://listen.181fm.com/181-beat_128k.mp3'] },
+    { id: 'h8', tab: 'hiphop', title: '🇺🇸 Golden Age 90s Rap', tagAr: 'عصر الراب الذهبي', tagEn: '90s Rap Classics', urls: ['https://listen.181fm.com/181-oldschool_128k.mp3', 'https://icecast.somafm.com/fluid-128-mp3'] },
+
+    // ⚡ رقص ودي جي وإلكترونيك (DANCE & EDM)
+    { id: 'd1', tab: 'dance', title: '🇺🇸 Energy 98 Dance Hits', tagAr: 'أقوى ديسكو ورقص', tagEn: 'Dance & EDM', urls: ['https://listen.181fm.com/181-energy98_128k.mp3', 'https://icecast.somafm.com/beatblender-128-mp3'] },
+    { id: 'd2', tab: 'dance', title: '🇺🇸 Beat Blender USA', tagAr: 'ديب هاوس وترانس نقي', tagEn: 'Deep House/Trance', urls: ['https://icecast.somafm.com/beatblender-128-mp3', 'https://icecast.somafm.com/defcon-128-mp3'] },
+    { id: 'd3', tab: 'dance', title: '🇺🇸 Techno Club 181', tagAr: 'تكنو نوادي نيويورك', tagEn: 'Techno Club', urls: ['https://listen.181fm.com/181-techno_128k.mp3', 'https://icecast.somafm.com/thetrip-128-mp3'] },
+    { id: 'd4', tab: 'dance', title: '🇺🇸 Dubstep Beyond', tagAr: 'داب ستيب وبيز هادر', tagEn: 'Dubstep & Bass', urls: ['https://icecast.somafm.com/dubstep-128-mp3', 'https://icecast.somafm.com/cliqhop-128-mp3'] },
+    { id: 'd5', tab: 'dance', title: '🇺🇸 DEF CON Radio EDM', tagAr: 'موسيقى المهرجانات', tagEn: 'Festival EDM', urls: ['https://icecast.somafm.com/defcon-128-mp3', 'https://icecast.somafm.com/beatblender-128-mp3'] },
+    { id: 'd6', tab: 'dance', title: '🇺🇸 The Trip Progressive', tagAr: 'بروجريسيف هاوس حماسي', tagEn: 'Progressive House', urls: ['https://icecast.somafm.com/thetrip-128-mp3', 'https://icecast.somafm.com/beatblender-128-mp3'] },
+    { id: 'd7', tab: 'dance', title: '🇺🇸 CliqHop IDM Beats', tagAr: 'إلكترونيك بريك بيتس', tagEn: 'IDM & Breakbeat', urls: ['https://icecast.somafm.com/cliqhop-128-mp3', 'https://icecast.somafm.com/dubstep-128-mp3'] },
+    { id: 'd8', tab: 'dance', title: '🇺🇸 Suburbs of Goa Trance', tagAr: 'سايكوديلك ترانس عالمي', tagEn: 'Psytrance Live', urls: ['https://icecast.somafm.com/suburbsofgoa-128-mp3', 'https://icecast.somafm.com/beatblender-128-mp3'] },
+    { id: 'd9', tab: 'dance', title: '🇺🇸 Miami Club Dance', tagAr: 'أجواء شواطئ ميامي', tagEn: 'Miami Beach Dance', urls: ['https://listen.181fm.com/181-energy98_128k.mp3', 'https://icecast.somafm.com/defcon-128-mp3'] },
+
+    // 🎷 آر أند بي وسول (R&B & SOUL)
+    { id: 'r1', tab: 'rnb', title: '🇺🇸 True R&B Hits', tagAr: 'أقوى روائع الآر أند بي', tagEn: 'True R&B', urls: ['https://listen.181fm.com/181-rnb_128k.mp3', 'https://icecast.somafm.com/sevensoul-128-mp3'] },
+    { id: 'r2', tab: 'rnb', title: '🇺🇸 Soul 181 Classic', tagAr: 'موسيقى السول الخالدة', tagEn: 'Classic Soul', urls: ['https://listen.181fm.com/181-soul_128k.mp3', 'https://icecast.somafm.com/sevensoul-128-mp3'] },
+    { id: 'r3', tab: 'rnb', title: '🇺🇸 Seven Inch Vintage Soul', tagAr: 'سول وفانك الستينات', tagEn: 'Vintage 45s Soul', urls: ['https://icecast.somafm.com/sevensoul-128-mp3', 'https://listen.181fm.com/181-soul_128k.mp3'] },
+    { id: 'r4', tab: 'rnb', title: '🇺🇸 Slow Jamz R&B', tagAr: 'سلو جامز ورومانسيات', tagEn: 'Slow Jamz', urls: ['https://listen.181fm.com/181-slowjamz_128k.mp3', 'https://listen.181fm.com/181-heart_128k.mp3'] },
+    { id: 'r5', tab: 'rnb', title: '🇺🇸 Heart Love Songs', tagAr: 'أجمل أغاني الحب', tagEn: 'Love Anthems', urls: ['https://listen.181fm.com/181-heart_128k.mp3', 'https://listen.181fm.com/181-slowjamz_128k.mp3'] },
+    { id: 'r6', tab: 'rnb', title: '🇺🇸 Neo Soul Vibes', tagAr: 'نيو سول حالم ومميز', tagEn: 'Neo Soul Vibes', urls: ['https://icecast.somafm.com/sevensoul-128-mp3', 'https://listen.181fm.com/181-soul_128k.mp3'] },
+    { id: 'r7', tab: 'rnb', title: '🇺🇸 Midnight Soul Train', tagAr: 'سهرة السول الدافئة', tagEn: 'Midnight Soul', urls: ['https://listen.181fm.com/181-soul_128k.mp3', 'https://icecast.somafm.com/sevensoul-128-mp3'] },
+
+    // 🎸 روك وميتال (ROCK & METAL)
+    { id: 'k1', tab: 'rock', title: '🇺🇸 Rock 181 Mainstream', tagAr: 'روك أمريكي أصيل', tagEn: 'Mainstream Rock', urls: ['https://listen.181fm.com/181-rock_128k.mp3', 'https://stream.radioparadise.com/rock-128'] },
+    { id: 'k2', tab: 'rock', title: '🇺🇸 The Eagle Classic Rock', tagAr: 'أعظم أغاني الروك', tagEn: 'Classic Rock', urls: ['https://listen.181fm.com/181-eagle_128k.mp3', 'https://stream.radioparadise.com/rock-128'] },
+    { id: 'k3', tab: 'rock', title: '🇺🇸 Hard Rock 181', tagAr: 'هارد روك حماسي وناري', tagEn: 'Hard Rock', urls: ['https://listen.181fm.com/181-hardrock_128k.mp3', 'https://listen.181fm.com/181-rock_128k.mp3'] },
+    { id: 'k4', tab: 'rock', title: '🇺🇸 The Buzz Alternative', tagAr: 'روك بديل معاصر', tagEn: 'Alternative Rock', urls: ['https://listen.181fm.com/181-buzz_128k.mp3', 'https://icecast.somafm.com/indiepop-128-mp3'] },
+    { id: 'k5', tab: 'rock', title: '🇺🇸 Indie Pop Rocks', tagAr: 'إندي روك مستقل', tagEn: 'Indie Rocks', urls: ['https://icecast.somafm.com/indiepop-128-mp3', 'https://stream.radioparadise.com/rock-128'] },
+    { id: 'k6', tab: 'rock', title: '🇺🇸 Radio Paradise Rock', tagAr: 'روك كاليفورنيا النقي', tagEn: 'Pure Rock Mix', urls: ['https://stream.radioparadise.com/rock-128', 'https://listen.181fm.com/181-rock_128k.mp3'] },
+    { id: 'k7', tab: 'rock', title: '🇺🇸 HairBand 80s Rock', tagAr: 'روك وميتال الثمانينات', tagEn: '80s Hair Metal', urls: ['https://listen.181fm.com/181-hairband_128k.mp3', 'https://listen.181fm.com/181-hardrock_128k.mp3'] },
+    { id: 'k8', tab: 'rock', title: '🇺🇸 Lithium 90s Grunge', tagAr: 'روك التسعينات وجرانج', tagEn: '90s Grunge Rock', urls: ['https://listen.181fm.com/181-lithium_128k.mp3', 'https://icecast.somafm.com/indiepop-128-mp3'] },
+    { id: 'k9', tab: 'rock', title: '🇺🇸 KEXP Seattle Radio', tagAr: 'إندي روك سياتل الشهير', tagEn: 'Seattle Indie', urls: ['https://kexp-mp3-128.streamguys1.com/kexp128.mp3', 'https://icecast.somafm.com/indiepop-128-mp3'] },
+
+    // 🤠 كانتري وموسيقى الريف (COUNTRY)
+    { id: 'c1', tab: 'country', title: '🇺🇸 Kickin Country', tagAr: 'أشهر أغاني الكانتري', tagEn: 'Modern Country', urls: ['https://listen.181fm.com/181-kickincountry_128k.mp3', 'https://icecast.somafm.com/bootliquor-128-mp3'] },
+    { id: 'c2', tab: 'country', title: '🇺🇸 Real Classic Country', tagAr: 'كانتري كلاسيك عريق', tagEn: 'Classic Country', urls: ['https://listen.181fm.com/181-realcountry_128k.mp3', 'https://icecast.somafm.com/bootliquor-128-mp3'] },
+    { id: 'c3', tab: 'country', title: '🇺🇸 Highway 181 Roads', tagAr: 'أغاني خطوط السفر', tagEn: 'Highway Roads', urls: ['https://listen.181fm.com/181-highway_128k.mp3', 'https://listen.181fm.com/181-kickincountry_128k.mp3'] },
+    { id: 'c4', tab: 'country', title: '🇺🇸 Boot Liquor Americana', tagAr: 'موسيقى رعاة البقر', tagEn: 'Americana Folk', urls: ['https://icecast.somafm.com/bootliquor-128-mp3', 'https://listen.181fm.com/181-kickincountry_128k.mp3'] },
+    { id: 'c5', tab: 'country', title: '🇺🇸 The Front Porch', tagAr: 'موسيقى بلوز وبلوجراس', tagEn: 'Bluegrass & Folk', urls: ['https://listen.181fm.com/181-frontporch_128k.mp3', 'https://icecast.somafm.com/bootliquor-128-mp3'] },
+    { id: 'c6', tab: 'country', title: '🇺🇸 90s Country Gold', tagAr: 'كانتري التسعينات الذهبي', tagEn: '90s Country', urls: ['https://listen.181fm.com/181-90scountry_128k.mp3', 'https://listen.181fm.com/181-realcountry_128k.mp3'] },
+    { id: 'c7', tab: 'country', title: '🇺🇸 Camp Country Hits', tagAr: 'أغاني التخييم والشواء', tagEn: 'Camp Country', urls: ['https://listen.181fm.com/181-campcountry_128k.mp3', 'https://icecast.somafm.com/bootliquor-128-mp3'] },
+    { id: 'c8', tab: 'country', title: '🇺🇸 Folk Forward Acoustic', tagAr: 'أكوستيك وفولك ريفي', tagEn: 'Folk Forward', urls: ['https://icecast.somafm.com/folkfwd-128-mp3', 'https://icecast.somafm.com/bootliquor-128-mp3'] },
+
+    // 📻 كلاسيكيات وريترو الثمانينات والتسعينات (RETRO & OLDIES)
+    { id: 't1', tab: 'retro', title: '🇺🇸 Awesome 80s Hits', tagAr: 'أعظم روائع الثمانينات', tagEn: '80s Hits', urls: ['https://listen.181fm.com/181-awesome80s_128k.mp3', 'https://icecast.somafm.com/u80s-128-mp3'] },
+    { id: 't2', tab: 'retro', title: '🇺🇸 Star 90s Hits', tagAr: 'ذكريات التسعينات الجميلة', tagEn: '90s Star Hits', urls: ['https://listen.181fm.com/181-star90s_128k.mp3', 'https://icecast.somafm.com/u80s-128-mp3'] },
+    { id: 't3', tab: 'retro', title: '🇺🇸 Underground 80s Synth', tagAr: 'سينث بوب الثمانينات', tagEn: 'Synthwave 80s', urls: ['https://icecast.somafm.com/u80s-128-mp3', 'https://listen.181fm.com/181-awesome80s_128k.mp3'] },
+    { id: 't4', tab: 'retro', title: '🇺🇸 Lite 80s Soft Pop', tagAr: 'ثمانينات هادئة وناعمة', tagEn: 'Soft 80s', urls: ['https://listen.181fm.com/181-lite80s_128k.mp3', 'https://icecast.somafm.com/u80s-128-mp3'] },
+    { id: 't5', tab: 'retro', title: '🇺🇸 Super 70s Hits', tagAr: 'ديسكو وروك السبعينات', tagEn: 'Super 70s', urls: ['https://listen.181fm.com/181-70s_128k.mp3', 'https://listen.181fm.com/181-goodtime_128k.mp3'] },
+    { id: 't6', tab: 'retro', title: '🇺🇸 Good Time 50s & 60s', tagAr: 'كلاسيكيات الخمسينات', tagEn: '50s & 60s Oldies', urls: ['https://listen.181fm.com/181-goodtime_128k.mp3', 'https://listen.181fm.com/181-greatoldies_128k.mp3'] },
+    { id: 't7', tab: 'retro', title: '🇺🇸 Classic Hits 181', tagAr: 'روائع الأجيال الذهبية', tagEn: 'Great Goldies', urls: ['https://listen.181fm.com/181-greatoldies_128k.mp3', 'https://listen.181fm.com/181-goodtime_128k.mp3'] },
+    { id: 't8', tab: 'retro', title: '🇺🇸 70s Disco Fever', tagAr: 'حمى الديسكو 70s', tagEn: 'Disco Fever', urls: ['https://listen.181fm.com/181-70s_128k.mp3', 'https://listen.181fm.com/181-awesome80s_128k.mp3'] },
+
+    // ☕ جاز وتشيلاوت واسترخاء (JAZZ & CHILLOUT)
+    { id: 'j1', tab: 'chill', title: '🇺🇸 Radio Paradise Mellow', tagAr: 'موسيقى رايقة ناعمة', tagEn: 'Mellow Mix', urls: ['https://stream.radioparadise.com/mellow-128', 'https://icecast.somafm.com/groovesalad-128-mp3'] },
+    { id: 'j2', tab: 'chill', title: '🇺🇸 Groove Salad Ambient', tagAr: 'أشهر إذاعة تشيلاوت عالمية', tagEn: 'World Famous Chill', urls: ['https://icecast.somafm.com/groovesalad-128-mp3', 'https://stream.radioparadise.com/mellow-128'] },
+    { id: 'j3', tab: 'chill', title: '🇺🇸 Lush Sensuous Vocals', tagAr: 'أصوات أنثوية هادئة', tagEn: 'Sensuous Chill', urls: ['https://icecast.somafm.com/lush-128-mp3', 'https://icecast.somafm.com/groovesalad-128-mp3'] },
+    { id: 'j4', tab: 'chill', title: '🇺🇸 Secret Agent Spy Lounge', tagAr: 'موسيقى لاونج وجاز سينمائي', tagEn: 'Spy Lounge & Jazz', urls: ['https://icecast.somafm.com/secretagent-128-mp3', 'https://icecast.somafm.com/illinois-128-mp3'] },
+    { id: 'j5', tab: 'chill', title: '🇺🇸 Deep Space One Ambient', tagAr: 'أمبينت الفضاء الهادئ', tagEn: 'Deep Space Ambient', urls: ['https://icecast.somafm.com/deepspaceone-128-mp3', 'https://icecast.somafm.com/dronezone-128-mp3'] },
+    { id: 'j6', tab: 'chill', title: '🇺🇸 Space Station Soma', tagAr: 'موسيقى استرخاء للتركيز', tagEn: 'Focus & Study Chill', urls: ['https://icecast.somafm.com/spacestation-128-mp3', 'https://icecast.somafm.com/groovesalad-128-mp3'] },
+    { id: 'j7', tab: 'chill', title: '🇺🇸 Drone Zone Deep Vibe', tagAr: 'موسيقى تأمل وسكينة', tagEn: 'Atmospheric Chill', urls: ['https://icecast.somafm.com/dronezone-128-mp3', 'https://icecast.somafm.com/deepspaceone-128-mp3'] },
+    { id: 'j8', tab: 'chill', title: '🇺🇸 Illinois Street Lounge', tagAr: 'كلاسيكيات جاز ولاونج راقي', tagEn: 'Classic Lounge Jazz', urls: ['https://icecast.somafm.com/illinois-128-mp3', 'https://icecast.somafm.com/secretagent-128-mp3'] },
+    { id: 'j9', tab: 'chill', title: '🇺🇸 Synphaera Space Ambient', tagAr: 'موسيقى نوم واسترخاء', tagEn: 'Sleep & Ambient', urls: ['https://icecast.somafm.com/synphaera-128-mp3', 'https://icecast.somafm.com/dronezone-128-mp3'] },
+    { id: 'j10', tab: 'chill', title: '🇺🇸 Vaporwaves Vibe', tagAr: 'موسيقى فابورويف حالمة', tagEn: 'Dreamy Vaporwave', urls: ['https://icecast.somafm.com/vaporwaves-128-mp3', 'https://icecast.somafm.com/groovesalad-128-mp3'] },
+    { id: 'j11', tab: 'chill', title: '🇺🇸 Sonic Universe Jazz', tagAr: 'جاز معاصر ونادر', tagEn: 'Avant-Garde Jazz', urls: ['https://icecast.somafm.com/sonicuniverse-128-mp3', 'https://icecast.somafm.com/groovesalad-128-mp3'] },
+    { id: 'j12', tab: 'chill', title: '🇺🇸 Smooth Jazz USA', tagAr: 'جاز أمريكي استرخائي', tagEn: 'Smooth Jazz', urls: ['https://stream.radioparadise.com/mellow-128', 'https://icecast.somafm.com/groovesalad-128-mp3', 'https://listen.181fm.com/181-smoothjazz_128k.mp3'] },
+    { id: 'j13', tab: 'chill', title: '🇺🇸 The Breeze Easy Listening', tagAr: 'موسيقى خفيفة ولطيفة', tagEn: 'Easy Listening', urls: ['https://listen.181fm.com/181-breeze_128k.mp3', 'https://stream.radioparadise.com/mellow-128'] },
+    { id: 'j14', tab: 'chill', title: '🇺🇸 Classical Guitar Relax', tagAr: 'جيتار كلاسيكي هادئ', tagEn: 'Acoustic Guitar', urls: ['https://listen.181fm.com/181-classicalmusic_128k.mp3', 'https://icecast.somafm.com/groovesalad-128-mp3'] }
+  ];
+
+  let appLang = localStorage.getItem('appLang') || (navigator.language.startsWith('ar') ? 'ar' : 'en');
+  const container = document.getElementById('stations-container');
+  let savedFavs = JSON.parse(localStorage.getItem('mshailFavs')) || [];
+
+  // المشغل المركزي الموحد
+  const masterAudio = new Audio();
+  let currentActiveStation = null;
+  let activeCardPlayerDiv = null;
+  let currentUrlIndex = 0;
+
+  // بناء كروت المحطات
+  let htmlContent = '';
+  stations.forEach(s => {
+    const isFav = savedFavs.includes(s.id);
+    htmlContent += `
+      <div class="card ${s.tab} ${isFav ? 'is-fav' : ''}" id="card-${s.id}">
+        <div class="card-top">
+          <div>
+            <div class="station-title">${s.title}</div>
+            <div class="station-tag dynamic-tag" data-ar="${s.tagAr}" data-en="${s.tagEn}">${appLang === 'ar' ? s.tagAr : s.tagEn}</div>
+          </div>
+          <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(this, '${s.id}')">★</button>
+        </div>
+        
+        <div class="custom-player" id="player-${s.id}">
+          <button class="play-btn" onclick="handleStationPlay('${s.id}')">▶</button>
+          <div class="visualizer"></div>
+          <div class="status-text dynamic-status" data-state="statusStop">${uiDict[appLang].statusStop}</div>
+        </div>
+      </div>
+    `;
+  });
+  container.innerHTML = htmlContent;
+  applyLanguage(appLang);
+
+  // أحداث المشغل المباشر
+  masterAudio.addEventListener('loadstart', () => {
+    if (activeCardPlayerDiv) {
+      updatePlayerStatus(activeCardPlayerDiv, 'buffering', uiDict[appLang].statusLoad);
+    }
+  });
+
+  masterAudio.addEventListener('playing', () => {
+    // تفعيل تموج الإضاءة في الخلفية عند بدء خروج الصوت
+    document.body.classList.add('is-audio-playing');
+
+    if (activeCardPlayerDiv) {
+      updatePlayerStatus(activeCardPlayerDiv, 'playing', uiDict[appLang].statusLive);
+      activeCardPlayerDiv.querySelector('.play-btn').innerHTML = '⏸';
+      updateBannerUI(true);
+    }
+  });
+
+  masterAudio.addEventListener('waiting', () => {
+    if (activeCardPlayerDiv) {
+      updatePlayerStatus(activeCardPlayerDiv, 'buffering', uiDict[appLang].statusLoad);
+    }
+  });
+
+  masterAudio.addEventListener('pause', () => {
+    // إيقاف تموج الإضاءة فوراً عند الإيقاف المؤقت
+    document.body.classList.remove('is-audio-playing');
+
+    if (activeCardPlayerDiv) {
+      activeCardPlayerDiv.classList.remove('playing', 'buffering', 'repairing');
+      activeCardPlayerDiv.querySelector('.play-btn').innerHTML = '▶';
+      activeCardPlayerDiv.querySelector('.status-text').innerText = uiDict[appLang].statusStop;
+      updateBannerUI(false);
+    }
+  });
+
+  // الإصلاح الصامت في الخلفية دون تحريك أي كرت أو تغيير اسم الإذاعة
+  masterAudio.addEventListener('error', () => {
+    repairCurrentStationInBackground();
+  });
+
+  function updatePlayerStatus(playerDiv, stateClass, text) {
+    playerDiv.classList.remove('playing', 'buffering', 'repairing');
+    if (stateClass) playerDiv.classList.add(stateClass);
+    playerDiv.querySelector('.status-text').innerText = text;
+  }
+
+  // تجربة الرابط البديل لنفس الإذاعة تماماً في الخلفية
+  function repairCurrentStationInBackground() {
+    if (!currentActiveStation || !activeCardPlayerDiv) return;
+
+    currentUrlIndex++;
+
+    // إظهار كلمة جاري الإصلاح على نفس الكرت المختار بالضبط
+    updatePlayerStatus(activeCardPlayerDiv, 'repairing', uiDict[appLang].statusFixing);
+
+    if (currentUrlIndex < currentActiveStation.urls.length) {
+      masterAudio.src = currentActiveStation.urls[currentUrlIndex];
+      masterAudio.load();
+      masterAudio.play().catch(() => {
+        repairCurrentStationInBackground();
+      });
+    } else {
+      // كحل أخير في الخلفية نأخذ رابطاً قوياً من نفس القسم لضمان خروج الصوت دون تغيير الكرت
+      const genreStations = stations.filter(s => s.tab === currentActiveStation.tab);
+      const safeBackup = genreStations[0].urls[0];
+      currentUrlIndex = 0;
+      
+      masterAudio.src = safeBackup;
+      masterAudio.load();
+      masterAudio.play().catch(() => {
+        updatePlayerStatus(activeCardPlayerDiv, '', uiDict[appLang].statusStop);
+        activeCardPlayerDiv.querySelector('.play-btn').innerHTML = '▶';
+        updateBannerUI(false);
+        document.body.classList.remove('is-audio-playing');
+      });
+    }
+  }
+
+  function handleStationPlay(stationId) {
+    const station = stations.find(s => s.id === stationId);
+    if (!station) return;
+
+    const playerDiv = document.getElementById(`player-${station.id}`);
+
+    // إيقاف المحطة إذا ضغط عليها وهي تعمل
+    if (currentActiveStation && currentActiveStation.id === station.id) {
+      if (!masterAudio.paused) {
+        masterAudio.pause();
+        return;
+      }
+    }
+
+    // تنظيف المحطة السابقة وثبات الكرت الحالي
+    if (activeCardPlayerDiv && activeCardPlayerDiv !== playerDiv) {
+      activeCardPlayerDiv.classList.remove('playing', 'buffering', 'repairing');
+      activeCardPlayerDiv.querySelector('.play-btn').innerHTML = '▶';
+      activeCardPlayerDiv.querySelector('.status-text').innerText = uiDict[appLang].statusStop;
+    }
+
+    currentActiveStation = station;
+    activeCardPlayerDiv = playerDiv;
+    currentUrlIndex = 0;
+
+    updatePlayerStatus(playerDiv, 'buffering', uiDict[appLang].statusLoad);
+    updateBannerUI(true);
+
+    masterAudio.src = station.urls[0];
+    masterAudio.load();
+    
+    const playPromise = masterAudio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        repairCurrentStationInBackground();
+      });
+    }
+  }
+
+  function toggleMasterPlay() {
+    if (currentActiveStation) {
+      if (!masterAudio.paused) {
+        masterAudio.pause();
+      } else {
+        masterAudio.play().catch(() => {
+          repairCurrentStationInBackground();
+        });
+      }
+    }
+  }
+
+  function updateBannerUI(isPlaying) {
+    const banner = document.getElementById('now-playing-banner');
+    const masterBtn = document.getElementById('np-master-btn');
+    const npTitle = document.getElementById('np-title');
+    const npTag = document.getElementById('np-tag');
+    const npBadgeText = document.getElementById('np-badge-text');
+
+    masterBtn.classList.remove('btn-disabled');
+
+    if (isPlaying && currentActiveStation) {
+      banner.classList.add('is-active');
+      npTitle.innerText = currentActiveStation.title;
+      npTag.innerText = (appLang === 'ar' ? currentActiveStation.tagAr : currentActiveStation.tagEn);
+      npBadgeText.innerText = uiDict[appLang].npPlaying;
+      masterBtn.innerHTML = '⏸';
+    } else {
+      banner.classList.remove('is-active');
+      npBadgeText.innerText = uiDict[appLang].npPaused;
+      masterBtn.innerHTML = '▶';
+    }
+  }
+
+  function toggleLanguage() {
+    appLang = (appLang === 'ar') ? 'en' : 'ar';
+    localStorage.setItem('appLang', appLang);
+    applyLanguage(appLang);
+  }
+
+  function applyLanguage(lang) {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.getElementById('ui-btn-lang').innerText = uiDict[lang].btnLang;
+
+    document.getElementById('lbl-fav').innerText = uiDict[lang].tabFav;
+    document.getElementById('lbl-pop').innerText = uiDict[lang].tabPop;
+    document.getElementById('lbl-hiphop').innerText = uiDict[lang].tabHipHop;
+    document.getElementById('lbl-dance').innerText = uiDict[lang].tabDance;
+    document.getElementById('lbl-rnb').innerText = uiDict[lang].tabRnb;
+    document.getElementById('lbl-rock').innerText = uiDict[lang].tabRock;
+    document.getElementById('lbl-country').innerText = uiDict[lang].tabCountry;
+    document.getElementById('lbl-retro').innerText = uiDict[lang].tabRetro;
+    document.getElementById('lbl-chill').innerText = uiDict[lang].tabChill;
+
+    if (!masterAudio || masterAudio.paused) {
+      document.getElementById('np-title').innerText = uiDict[lang].npIdle;
+      document.getElementById('np-tag').innerText = uiDict[lang].npIdleTag;
+      document.getElementById('np-badge-text').innerText = uiDict[lang].statusStop;
+    } else if (currentActiveStation) {
+      document.getElementById('np-tag').innerText = (lang === 'ar' ? currentActiveStation.tagAr : currentActiveStation.tagEn);
+      document.getElementById('np-badge-text').innerText = uiDict[lang].npPlaying;
+    }
+
+    document.querySelectorAll('.dynamic-tag').forEach(el => {
+      el.innerText = el.getAttribute(`data-${lang}`);
+    });
+  }
+
+  function toggleFav(btn, stationId) {
+    const card = btn.closest('.card');
+    if (savedFavs.includes(stationId)) {
+      savedFavs = savedFavs.filter(id => id !== stationId);
+      btn.classList.remove('active');
+      card.classList.remove('is-fav');
+    } else {
+      savedFavs.push(stationId);
+      btn.classList.add('active');
+      card.classList.add('is-fav');
+    }
+    localStorage.setItem('mshailFavs', JSON.stringify(savedFavs));
+  }
+</script>
+
+</body>
+</html>
